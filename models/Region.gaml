@@ -25,7 +25,7 @@ species region {
 		step <- 1#year;
 		int age <- 0;
 		loop proportion over: age_proportions {
-			create citizen number: int(init_size * proportion) with: (birthday: starting_date-age*#year);
+			create citizen number: int(init_size * proportion) with: (birthday: starting_date-age*#year, fatherId: 0, motherId: 0);
 			age <- age + 1;
 		}
 	}

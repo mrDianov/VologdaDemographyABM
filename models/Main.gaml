@@ -18,6 +18,7 @@ global {
 	int birth_inc <- 0;
 	int prev_size <- vologda_size;
 	init {
+		create database;
 		step <- 1#year;
 		starting_date <- date("20220101");
 		create region number: 1 with: (name: "Вологда", init_size: vologda_size);
