@@ -9,6 +9,7 @@
 model Main
 
 import "Region.gaml"
+import "Humankind.gaml"
 
 global {
 	int vologda_size <- 10000;

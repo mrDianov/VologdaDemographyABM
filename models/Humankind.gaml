@@ -70,9 +70,9 @@ species human {
 		create species(self) with: (mother: self, father: f, birthday: current_date);
 		child_cnt <- child_cnt + 1;
 		if(not dead(f)) {
-			f.child_cnt <- f.child_cnt + 1;
-		}
-		
+		f.child_cnt <- f.child_cnt + 1;
+	}
+	
 	}
 	
 	reflex pairing when: is_reproductive() and (sex = MALE) and partner = nil {
