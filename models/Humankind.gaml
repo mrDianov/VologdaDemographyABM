@@ -8,9 +8,13 @@
 
 model Humankind
 
+import "PyramidModel.gaml" 
+
 global {
 	string MALE <- 'm';
 	string FEMALE <- 'f';
+	int death_cnt <- 0;
+	list<float> m_list <- [0.004356, 0.00045, 0.000315, 0.000226, 0.000172, 0.000178, 0.000154, 0.00016, 0.000152, 0.00015, 0.000161, 0.000193, 0.000215, 0.000259, 0.000345, 0.0004, 0.000427, 0.000493, 0.000736, 0.001004, 0.001181, 0.001333, 0.001295, 0.001463, 0.001453, 0.001592, 0.001556, 0.001694, 0.001803, 0.001839, 0.002026, 0.002169, 0.002386, 0.002733, 0.003019, 0.00336, 0.003428, 0.003732, 0.004123, 0.004549, 0.004944, 0.005081, 0.005503, 0.006073, 0.006154, 0.006496, 0.006767, 0.006952, 0.007299, 0.007611, 0.00822, 0.00812, 0.008599, 0.009346, 0.009927, 0.010867, 0.011187, 0.012088, 0.012958, 0.014059, 0.015251, 0.016151, 0.017716, 0.019424, 0.020667, 0.021644, 0.023623, 0.025344, 0.027223, 0.029137, 0.032544, 0.033424, 0.036342, 0.041972, 0.039804, 0.050558, 0.045901, 0.051014, 0.058128, 0.057692, 0.077806, 0.076142, 0.088139, 0.102196, 0.104799, 0.11911, 0.131147, 0.144309, 0.155713, 0.177249, 0.197253, 0.198905, 0.217091, 0.256453, 0.263833, 0.264779, 0.260201, 0.218944, 0.205048, 0.177401, 0.074475];
 }
 
 species human {
@@ -22,8 +26,8 @@ species human {
 	int child_cnt <- 0;
 	
 	init {
-		birthday <- current_date; // временная мера
-		if(flip(0.5)) {sex <- MALE;}
+//		birthday <- current_date; // временная мера
+		if(flip(world.male_sex_p(get_age()))) {sex <- MALE;}
 		else {sex <- FEMALE;}
 	}
 	
@@ -63,13 +67,18 @@ species human {
 	}
 	
 	action birth(human f) {
-		create human with: (mother: self, father: f);
+		create species(self) with: (mother: self, father: f, birthday: current_date);
 		child_cnt <- child_cnt + 1;
-		f.child_cnt <- f.child_cnt + 1;
+		if(not dead(f)) {
+			f.child_cnt <- f.child_cnt + 1;
+		}
+		
 	}
 	
 	reflex pairing when: is_reproductive() and (sex = MALE) and partner = nil {
-		ask human where (each.sex = FEMALE) where (each.is_reproductive()) {
+//		write self;
+		ask species(self) where(each.sex = FEMALE) where(each.is_reproductive()) {
+//			write self;
 			if(self.partner = nil and myself.partner = nil and self.sex = FEMALE and (not self.is_relatives(myself))) {
 				do make_pair(myself);
 			}
@@ -89,7 +98,13 @@ species human {
 	}
 	
 	reflex alive {
-		if(not flip((100-get_age())/100)) {
+		float m <- last(m_list);
+		if (get_age() < length(m_list)) {
+			m <- m_list[get_age()];
+		}
+		float death_p <- (2*m)/(2+m);
+		if(flip(death_p)) {
+			death_cnt <- death_cnt + 1;
 			do die;
 		}
 	}
