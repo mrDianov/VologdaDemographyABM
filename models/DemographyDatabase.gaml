@@ -56,7 +56,7 @@ species database parent: AgentDB {
 		string mid <- motherId = 0 ? nil : motherId;
 		string fid <- fatherId = 0 ? nil : fatherId;
 //		do executeUpdate updateComm: "INSERT INTO relatives (id, mother, father) VALUES(0, 0, 0);";
-		do insert into: "relatives" columns: ["id", "mother", "father"] values: [id, motherId, fatherId];
+//		do insert into: "relatives" columns: ["id", "mother", "father"] values: [id, motherId, fatherId];
 	}
 	
 	int getMotherId(int id) {

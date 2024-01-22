@@ -12,7 +12,7 @@ import "Region.gaml"
 import "Humankind.gaml"
 
 global {
-	int vologda_size <- 10000;
+	int vologda_size <- 1300000;
 	int death_inc <- 0;
 	int prev_death_cnt <- 0;
 	int birth_inc <- 0;

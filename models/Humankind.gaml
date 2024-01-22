@@ -96,6 +96,7 @@ species human {
 //			write self;
 			if(self.partner = nil and myself.partner = nil and self.sex = FEMALE and (not self.is_relatives(myself))) {
 				do make_pair(myself);
+				return;
 			}
 		}
 	}
@@ -109,6 +110,7 @@ species human {
 		}
 		if (flip(v/(60-18))) {
 			do birth(partner);
+			return;
 		}
 	}
 	
