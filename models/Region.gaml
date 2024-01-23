@@ -38,6 +38,10 @@ species region {
 		return length(citizen.population);
 	}
 	
-	species citizen parent: human;
+	species citizen parent: human {
+		init {
+			
+		}
+	}
 }
 

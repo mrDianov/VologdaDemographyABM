@@ -36,10 +36,9 @@ species human {
 		else {sex <- FEMALE;}
 		ask database {
 			if (! isConnected()) {
-				do connect;
+				do connect params: PGSQL_PARAMS;
 			}
-
-			do createHumanRecord(myself.id, myself.motherId, myself.fatherId);
+			myself.id <- createHumanRecord(myself.motherId, myself.fatherId, myself.sex, myself.birthday);
 		}
 	}
 	
@@ -92,7 +91,7 @@ species human {
 	
 	reflex pairing when: is_reproductive() and (sex = MALE) and partner = nil {
 //		write self;
-		ask species(self) where(each.sex = FEMALE) where(each.is_reproductive()) {
+		ask species(self) where(each.sex = FEMALE and each.is_reproductive()) parallel: true {
 //			write self;
 			if(self.partner = nil and myself.partner = nil and self.sex = FEMALE and (not self.is_relatives(myself))) {
 				do make_pair(myself);
