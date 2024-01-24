@@ -10,9 +10,12 @@ model DemographyDatabase
 
 /* Insert your model definition here */
 global {
-//	init {
-//		create database;
-//	}
+	init {
+		create database;
+		ask database {
+			write getReproductiveWomen();
+		}
+	}
 }
 
 species database parent: AgentDB {
@@ -80,6 +83,18 @@ species database parent: AgentDB {
 	int getFatherId(int id) {
 		int fatherId <- select("SELECT father FROM relatives where id = ?;", [id])[2][0][0];
 		return fatherId;
+	}
+	
+	list<list> getReproductiveWomen {
+		return select("select * from gama.reproductive_women_view rmv")[2];
+	}
+	
+	list<list> getReproductiveMen {
+		return select("select * from gama.reproductive_men_view rmv")[2];
+	}
+	
+	action makePair(int manId, int womanId) {
+		do insert into: "pairs" columns: ["human_man_id", "human_woman_id"] values: [manId, womanId];
 	}
 }
 
